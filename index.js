@@ -3,6 +3,7 @@ const app = express()
 const login = require('./login/login.route')
 const bodyparser = require('body-parser')
 const register = require('./register')
+const users = require('./users')
 const { ValidationError } = require('express-validation')
 
 app.use(bodyparser.json())
@@ -12,6 +13,7 @@ app.use(express.urlencoded({
 
   app.use('/login',login)
 app.use('/register' , register)
+app.use('/user' , users)
 
 app.use(function(err, req, res, next) {
     if (err instanceof ValidationError) {
@@ -20,4 +22,4 @@ app.use(function(err, req, res, next) {
     return res.status(500).json(err)
   })
 
-app.listen(6000)
+app.listen(3030)
