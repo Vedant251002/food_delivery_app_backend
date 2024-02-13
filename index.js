@@ -5,7 +5,9 @@ const bodyparser = require('body-parser')
 const register = require('./register')
 const users = require('./users')
 const { ValidationError } = require('express-validation')
+const cors = require('cors')
 
+app.use(cors({origin : 'http://localhost:3000'}))
 app.use(bodyparser.json())
 app.use(express.urlencoded({
     extended: false
