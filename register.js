@@ -9,15 +9,15 @@ const validateUser = {
         password : Joi.string().required(),
         res_name : Joi.string().required(),
         address : Joi.string().required(),
-        mobileno : Joi.number().required().max(10)
+        mobileno : Joi.string().required().max(10)
     })
 }
 
 router.post('/' , validate(validateUser),async(req,res) => {
     let {name , password } = req.body
-    let {rows} = await client.query('insert into users(name,password)values($1,$2)',[name ,password])
+    let {rows} = await client.query('insert into users(name,password)values($1,$2) returning id',[name ,password])
     let {res_name , address , mobileno} = req.body
-    let data = await client.query('insert into restaurants(name,address,mobileno)values($1,$2,$3)',[res_name,address,mobileno])
+    let data = await client.query('insert into restaurants(name,address,mobileno,owner)values($1,$2,$3,$4)',[res_name,address,mobileno,rows[0].id])
     res.json({message : 'done'})
 })
 
