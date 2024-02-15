@@ -8,8 +8,9 @@ router.get('/', async(req,res)=> {
 
 router.post('/add',async(req,res) => {
     const { name , category , price , hotel_id } = req.body
-    const {rows} = await client.query('insert into items(name , category , price ,hotel_id ) values($1,$2,$3,$4)',[name , category , price , hotel_id])
-    res.json({message : 'done'})
+    const {rows} = await client.query('insert into items(name , category , price ,hotel_id ) values($1,$2,$3,$4) returning id',[name , category , price , hotel_id])
+    const response = await client.query('select * from items where id = $1' ,[rows[0].id])
+    res.json(response.rows)
 })
 
 module.exports = router
